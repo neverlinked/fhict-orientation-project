@@ -8,6 +8,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="path/to/bootstrap.min.css">
+    <link rel="stylesheet" href="/website_style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
     <style>
         body {
             
@@ -27,11 +29,60 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Menu</a>
-
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="menu.html">Cart</a>
+                </li>
+                <li><a href="" class="cart"><i class="fas fa-shopping-cart"></i></a></li>
             </ul>
         </div>
     </nav>
-
+    <body>
+        <!-- ... -->
+        <div class="menu">
+            <h2 id="menu_title">PIZZA AND DRINKS</h2>
+            <div class="menu-row">
+                <div id="margherita_pic" class="menu-item" data-item-number="1">
+                    <h3>Margherita</h3>
+                    <p>Tomato sauce, mozzarella cheese, and fresh basil.</p>
+                    <p class="price">$12.99</p>
+                    <button class="special-button">Add to Order</button>
+                </div>
+                <div id="pepperoni_pic" class="menu-item" data-item-number="2">
+                    <h3>Pepperoni</h3>
+                    <p>Tomato sauce, mozzarella cheese, and pepperoni slices.</p>
+                    <p class="price">$14.99</p>
+                    <button class="special-button">Add to Order</button>
+                </div>
+            </div>
+            <div class="menu-row">
+                <div class="menu-item" data-item-number="3" id="marinara_pic">
+                    <h3>Marinara</h3>
+                    <p>Tomato sauce, garlic, and oregano (no cheese).</p>
+                    <p class="price">$10.99</p>
+                    <button class="special-button">Add to Order</button>
+                </div>
+                <div class="menu-item" data-item-number="4" id="meatlovers_pic">
+                    <h3>Meat Lovers</h3>
+                    <p>Pepperoni, Italian sausage, ham, bacon, seasoned pork & beef.</p>
+                    <p class="price">$19.99</p>
+                    <button class="special-button">Add to Order</button>
+                </div>
+                <div class="menu-item" data-item-number="5" id="water_pic">
+                    <h3>Water</h3>
+                    <p>500ml bottle of still water.</p>
+                    <p class="price">$1.99</p>
+                    <button class="special-button">Add to Order</button>
+                </div>
+                <div class="menu-item" data-item-number="6" id="cola_pic">
+                    <h3>Coca-Cola</h3>
+                    <p>330ml can of Coca-Cola.</p>
+                    <p class="price">$3.99</p>
+                    <button class="special-button">Add to Order</button>
+                </div>
+            </div>
+        </div>
+    
+    </body>
 </body>
 </html>

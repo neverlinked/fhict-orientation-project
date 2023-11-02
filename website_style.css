@@ -1,0 +1,128 @@
+body{
+    width: 100%;
+    height: 100vh;
+    background: #e2e2e2;
+    overflow: hidden;
+    cursor: url(cursor.png), auto;
+}
+
+.menu {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .menu-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+
+  .menu-item {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 20px;
+    width: calc(50% - 10px);
+    box-sizing: border-box;
+    margin-bottom: 20px;
+    text-align: center;
+    color: white;
+    border-style: solid;
+    border-color: #4d4d4d;
+    border-width: 5px;
+    color: white;
+    font-weight: bold;
+    text-shadow: 0px 5px 20px black;
+    font-family: sans-serif;
+  }
+
+  #item_text {
+    border-style: solid;
+    border-color: rgb(83, 83, 83);
+    border-width: 4px;
+  }
+
+  #margherita_pic {
+    background-image: url(/images/margherita.webp);
+    background-color: transparent;
+    background-position: center center;
+  }
+
+  #pepperoni_pic {
+    background-image: url(/images/pepperoni.jpg);
+    background-color: transparent;
+    background-position: center center;
+  }
+
+  #marinara_pic {
+    background-image: url(/images/marinara.webp);
+    background-color: transparent;
+    background-position: center center;
+  }
+
+  #meatlovers_pic {
+    background-image: url(/images/meatlovers.jpg);
+    background-color: transparent;
+    background-position: center center;
+  }
+
+  #water_pic {
+    background-image: url(/images/water.jpeg);
+    background-color: transparent;
+    background-position: center center;
+  }
+
+  #cola_pic {
+    background-image: url(/images/cocacola.jpeg);
+    background-color: transparent;
+    background-position: center center;
+  }
+  
+  .menu-item h3 {
+    margin-bottom: 10px;
+  }
+  
+  .menu-item p {
+    margin-bottom: 10px;
+  }
+  
+  .price {
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .special-button {
+    background-color: #313131;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  #menu_title {
+    text-align: center;
+    font-family: serif;
+  }
+
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.cart {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.cart img {
+    width: 30px;
+    height: 30px;
+}
