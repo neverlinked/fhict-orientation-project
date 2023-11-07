@@ -1,176 +1,295 @@
+<!DOCTYPE html>
 <html>
-    <head>
-        <title>cash register</title>
-    </head>
-    <style>
-        table {
-            margin: 0 auto;
-            float: left;
-            width: 70%;
-        }
+<head>
+  <title>Cash register</title>
+  <meta http-equiv="refresh" content="60">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+    }
 
-        .button {
-            width: 100px;
-            height: 100px;
-            border: none;
-            cursor: pointer;
-        }
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-color: #fff;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 5px;
+      max-width: 50%;
+      margin: 0 auto;
+    }
 
-        .button img {
-            width: 100%;
-            height: 100%;
-        }
+    h1 {
+      text-align: center;
+    }
 
-        .queue {
-            float: left;
-            width: 30%;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-    </style>
-    <body>
-        <div class="queue">
-            <h1>Queue</h1>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
 
-            <table>
-                <tr>
-                    <th>Order #</th>
-                    <th>Type</th>
-                    <th>Qty</th>
-                    <th>Action</th>
-                </tr>
-                {% for (type, qty) in pizzas %}
-                    <tr>
-                        <td>{{ loop.index }}</td>
-                        <td>{{ type }}</td>
-                        <td>{{ qty }}</td>
-                        <td><button onclick="removeFromQueue({{ loop.index }})">Remove</button></td>
-                    </tr>
-                {% endfor %}
-            </table>
+    table, th, td {
+      border: 1px solid #ddd;
+    }
+
+    th, td {
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    .item-input {
+      width: 100%; 
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    .item-input label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    .item-input input {
+      width: 100%;
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+    }
+
+    .submit-button {
+      background-color: #007bff;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+
+    .submit-button:hover {
+      background-color: #0056b3;
+    }
+
+    .update-status, .remove {
+      background-color: #4CAF50;
+      color: #fff;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+
+    .update-status:hover, .remove:hover {
+      background-color: #45a049;
+    }
+
+    .item-counter {
+      display: flex;
+      align-items: center;
+    }
+
+    .item-counter button {
+      background-color: #ff0000;
+      color: #fff;
+      border: none;
+      border-radius: 3px;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+
+    .item-counter button.increment {
+      background-color: #00ff00;
+    }
+
+    .table-number-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .table-number-container label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    .table-number-container button {
+      background-color: #ff0000;
+      color: #fff;
+      border: none;
+      border-radius: 3px;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+
+    .table-number-container button.increment {
+      background-color: #00ff00;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="table-container">
+      <h1>Orders:</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>Table number</th>
+            <th>Items</th>
+            <th>Qty</th>
+            <th>Price</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for order in orders %}
+          <tr>
+            <td>{{ order['table_number'] }}</td>
+            <td>
+              {% for item, quantity in order['items'].items() if quantity > 0 %}
+                {{ item }}<br>
+              {% endfor %}
+            </td>
+            <td>
+              {% for item, quantity in order['items'].items() if quantity > 0 %}
+                {{ quantity }}<br>
+              {% endfor %}
+            </td>
+            <td>{{ order['total_price'] }}</td>
+            <td>
+              <select id="status" name="status{{ loop.index }}">
+                <option value="pending" {% if order['status'] == 'pending' %}selected{% endif %}>Pending</option>
+                <option value="preparation" {% if order['status'] == 'preparation' %}selected{% endif %}>In Preparation</option>
+                <option value="done" {% if order['status'] == 'done' %}selected{% endif %}>Done</option>
+              </select>
+            </td>
+            <td>
+              <form action="{{ url_for('remove_order') }}" method="POST">
+                <input type="hidden" name="order_index" value="{{ loop.index0 }}">
+                <input type="submit" class="remove" value="Remove">
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <p></p>
+    <div id="form-container" style="max-width: 100%;">
+      <form action="{{ url_for('send_order') }}" method="POST" onsubmit="validateForm()">
+        <div class="table-number-container">
+          <label for="table_number">Table number:</label>
+          <button type="button" class="decrement" onclick="decrementItem('table_number')">-</button>
+          <input type="number" id="table_number" name="table_number" required value="1" class="table-number-input">
+          <button type="button" class="increment" onclick="incrementItem('table_number')">+</button>
         </div>
-        <br><br>
-        <table style="margin: 0 auto;">
-            <tr>
-                <td>
-                    <a href="#" class="button" onclick="addToQueue('cocacola', 1)">
-                        <img src="{{ url_for('static', filename='cocacola.jpeg') }}" alt="cocacola" style="width: 400px; height: 300px;">
-                    </a>
-                </td>
-                <td>
-                    <a href="#" class="button" onclick="addToQueue('marinara', 1)">
-                        <img src="{{ url_for('static', filename='marinara.webp') }}" alt="marinara pizza" style="width: 400px; height: 300px;">
-                    </a>
-                </td>
-                <td>
-                    <a href="#" class="button" onclick="addToQueue('margherita', 1)">
-                        <img src="{{ url_for('static', filename='margherita.webp') }}" alt="margherita pizza" style="width: 400px; height: 300px;">
-                    </a>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <a href="#" class="button" onclick="addToQueue('water', 1)">
-                        <img src="{{ url_for('static', filename='water.jpeg') }}" alt="water" style="width: 400px; height: 300px;">
-                    </a>
-                </td>
-                <td>
-                    <a href="#" class="button" onclick="addToQueue('meatlovers', 1)">
-                        <img src="{{ url_for('static', filename='meatlovers.jpg') }}" alt="meatlovers pizza" style="width: 400px; height: 300px;">
-                    </a>
-                </td>
-                <td>
-                    <a href="#" class="button" onclick="addToQueue('pepperoni', 1)">
-                        <img src="{{ url_for('static', filename='pepperoni.jpg') }}" alt="pepperoni pizza" style="width: 400px; height: 300px;">
-                    </a>
-                </td>
-            </tr>
-        </table>
+        <p></p>
+        <div class="item-input">
+          <label for="item1">Margherita:</label>
+          <div class="item-counter">
+            <button type="button" class="decrement" onclick="decrementItem('item1')">-</button>
+            <input type="number" id="item1" name="Margherita" value="0" min="0">
+            <button type="button" class="increment" onclick="incrementItem('item1')">+</button>
+          </div>
+        </div>
 
-        <form action="/register" method="post">
-            <label>Item:</label><br>
-            <input type="text" name="type"><br><br>
+        <div class="item-input">
+          <label for="item2">Pepperoni:</label>
+          <div class="item-counter">
+            <button type="button" class="decrement" onclick="decrementItem('item2')">-</button>
+            <input type="number" id="item2" name="Pepperoni" value="0" min="0">
+            <button type="button" class="increment" onclick="incrementItem('item2')">+</button>
+          </div>
+        </div>
 
-            <label>Qty:</label><br>
-            <input type="number" name="Qty"><br><br><br>
+        <div class="item-input">
+          <label for="item3">Marinara:</label>
+          <div class="item-counter">
+            <button type="button" class="decrement" onclick="decrementItem('item3')">-</button>
+            <input type="number" id="item3" name="Marinara" value="0" min="0">
+            <button type="button" class="increment" onclick="incrementItem('item3')">+</button>
+          </div>
+        </div>
 
-            <input type="submit" value="Add to queue"></input>
-        </form>
-        <script>
-            const clickCounts = {}; // To store click counts for each pizza type
-            let orderCount = 0; // To store the order number
-            const pizzas = [];
-        
-            function addToQueue(pizzaType) {
-                if (clickCounts[pizzaType]) {
-                    clickCounts[pizzaType]++;
-                } else {
-                    clickCounts[pizzaType] = 1;
-                }
-        
-                orderCount++; // Increment the order count
-        
-                const qtyInput = document.querySelector('input[name="Qty"]');
-                qtyInput.value = clickCounts[pizzaType];
-        
-                const pizzaNameInput = document.querySelector('input[name="type"]');
-                pizzaNameInput.value = pizzaType;
-        
-                const orderNumberInput = document.querySelector('input[name="order_number"]');
-                orderNumberInput.value = orderCount;
-        
-                // Add the item to the queue table
-                addToQueueTable(orderCount, pizzaType, clickCounts[pizzaType]);
-            }
-        
-            function removeFromQueue(orderNumber) {
-                // Find the index of the order with the specified order number
-                const index = pizzas.findIndex((order) => order.orderNumber === orderNumber);
-                if (index !== -1) {
-                    // Remove the order from the queue
-                    pizzas.splice(index, 1);
-                    updateQueueTable();
-                }
-            }
-        
-            // Helper function to add an item to the queue table
-            function addToQueueTable(orderNumber, pizzaType, qty) {
-                const queueTable = document.querySelector('.queue table');
-                const tbody = queueTable.querySelector('tbody');
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${orderNumber}</td>
-                    <td>${pizzaType}</td>
-                    <td>${qty}</td>
-                    <td>Pending</td> <!-- Add "Pending" status here -->
-                    <td><button onclick="removeFromQueue(${orderNumber})">Remove</button></td>`;
-                tbody.appendChild(row);
-                // Store the order details in the 'pizzas' array
-                pizzas.push({ orderNumber, type: pizzaType, qty, status: "Pending" });
-            }
-        
-            function updateQueueTable() {
-                const queueTable = document.querySelector('.queue table');
-                const tbody = queueTable.querySelector('tbody');
-                // Clear the existing table rows
-                while (tbody.firstChild) {
-                    tbody.removeChild(tbody.firstChild);
-                }
-                // Rebuild the table with updated data
-                pizzas.forEach((order) => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${order.orderNumber}</td>
-                        <td>${order.type}</td>
-                        <td>${order.qty}</td>
-                        <td>${order.status}</td>
-                        <td><button onclick="removeFromQueue(${order.orderNumber})">Remove</button></td>
-                    `;
-                    tbody.appendChild(row);
-                });
-            }
-        </script>
-        
-        
-    </body>
+        <div class="item-input">
+          <label for="item4">Meatlovers:</label>
+          <div class="item-counter">
+            <button type="button" class="decrement" onclick="decrementItem('item4')">-</button>
+            <input type="number" id="item4" name="Meatlovers" value="0" min="0">
+            <button type="button" class="increment" onclick="incrementItem('item4')">+</button>
+          </div>
+        </div>
+
+        <div class="item-input">
+          <label for="item5">Coca Cola:</label>
+          <div class="item-counter">
+            <button type="button" class="decrement" onclick="decrementItem('item5')">-</button>
+            <input type="number" id="item5" name="Coca Cola" value="0" min="0">
+            <button type="button" class="increment" onclick="incrementItem('item5')">+</button>
+          </div>
+        </div>
+
+        <div class="item-input">
+          <label for="item6">Water bottle:</label>
+          <div class="item-counter">
+            <button type="button" class="decrement" onclick="decrementItem('item6')">-</button>
+            <input type="number" id="item6" name="Water Bottle" value="0" min="0">
+            <button type="button" class="increment" onclick="incrementItem('item6')">+</button>
+          </div>
+        </div>
+
+        <input type="submit" class="submit-button" value="Submit">
+      </form>
+    </div>
+  </div>
+  <script>
+    function incrementItem(itemName) {
+      const itemInput = document.getElementById(itemName);
+      itemInput.value = parseInt(itemInput.value) + 1;
+    }
+
+    function decrementItem(itemName) {
+      const itemInput = document.getElementById(itemName);
+      if (parseInt(itemInput.value) > 0) {
+        itemInput.value = parseInt(itemInput.value) - 1;
+      }
+    }
+
+    function validateForm() {
+      const tableNumber = document.querySelector('.table-number-input').value;
+      const items = [
+        'Margherita',
+        'Pepperoni',
+        'Marinara',
+        'Meatlovers',
+        'Coca Cola',
+        'Water Bottle',
+      ];
+
+      const totalQuantity = items.reduce((total, item) => {
+        const quantity = parseInt(document.querySelector(`[name="${item}"]`).value);
+        return total + quantity;
+      }, 0);
+
+      if (tableNumber === '0' || totalQuantity === 0) {
+        return false;
+      }
+
+      return true;
+    }
+  </script>
+</body>
 </html>
