@@ -8,6 +8,22 @@ order_index = 0
 
 @app.route('/')
 def main():
+    return render_template('index.html')
+
+@app.route('/website_main')
+def website_main():
+    return render_template('website_main.html')
+
+@app.route('/menu')
+def menu():
+    return render_template('menu.html')
+
+@app.route('/cart')
+def cart():
+    return render_template('cart.html')
+
+@app.route('/cashier')
+def cashier():
     return render_template('cashier.html', orders=orders)
 
 @app.route('/kitchen')
