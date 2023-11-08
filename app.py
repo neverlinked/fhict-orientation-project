@@ -30,6 +30,36 @@ def cashier():
 def kitchen():
     return render_template('kitchen.html', orders=orders)
 
+@app.route('/add_order', methods=['POST'])
+def add_order():
+    global order_index  
+    table_number = request.form['table_number']
+    item1 = int(request.form['Margherita'])
+    item2 = int(request.form['Pepperoni'])
+    item3 = int(request.form['Marinara'])
+    item4 = int(request.form['Meatlovers'])
+    item5 = int(request.form['Coca Cola'])
+    item6 = int(request.form['Water Bottle'])
+    total_price = item1 * 12.99 + item2 * 14.99 + item3 * 10.99 + item4 * 19.99 + item5 * 3.99 + item6 * 1.99
+    
+    order = {
+        'table_number': table_number,
+        'items': {
+            'Margherita': item1,
+            'Pepperoni': item2,
+            'Marinara': item3,
+            'Meatlovers': item4,
+            'Coca Cola': item5,
+            'Water Bottle': item6
+        },
+        'status': 'pending',
+        'total_price': total_price
+    }
+    
+    orders.append(order)
+    order_index += 1  
+    return redirect(url_for('cashier'))
+
 @app.route('/send_order', methods=['POST'])
 def send_order():
     global order_index  
@@ -58,7 +88,7 @@ def send_order():
     
     orders.append(order)
     order_index += 1  
-    return redirect(url_for('main'))
+    return redirect(url_for('cart'))
 
 @app.route('/update_status', methods=['POST'])
 def update_status():

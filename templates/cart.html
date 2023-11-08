@@ -81,12 +81,18 @@
     <link rel="stylesheet" href="/static/css/website.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // JavaScript function to show a pop-up message
+        function showPopupMessage() {
+            alert("Thank you for your order!");
+        }
+    </script>
 </head>
 <body style="background-image: url('/static/background.jpg'); background-size: cover;">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="#">
             <img src="/static/logo.png" alt="ML Pizza">
-          </a>
+        </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -98,15 +104,13 @@
                 <li class="nav-item">
                     <a class="nav-link" href="menu">Menu</a>
                 </li>
-                    <li><a href="/cart" class="cart"><i class="fas fa-shopping-cart"></i></a></li>
+                <li><a href="/cart" class="cart"><i class="fas fa-shopping-cart"></i></a></li>
             </ul>
         </div>
     </nav>
 
-
-
     <div id="form-container">
-        <form id="orderForm" action="{{ url_for('send_order') }}" method="POST">
+        <form id="orderForm" action="{{ url_for('send_order') }}" method="POST" onsubmit="showPopupMessage()">
             <label for="table_number">Please enter your table number: </label>
             <input type="number" id="table_number" name="table_number" required>
             <br>
@@ -134,20 +138,20 @@
                 <div class="item-input">
                     <label for="item6">Water Bottle:</label>
                     <input type="number" id="item6" name="Water Bottle" value="0" min="0">
-                </div> 
-                <div class="credit-card-inputs">
-                    <label for="cardholder_name">Cardholder name:</label>
-                    <input type="text" id="cardholder_name" name="cardholder_name" required>
-                    <br>
-                    <label for="card_number">Card number:</label>
-                    <input type="text" id="card_number" name="card_number" required>
-                    <br>
-                    <label for="expiry_date">Expiry date:</label>
-                    <input type="text" id="expiry_date" name="expiry_date" required>
-                    <br>
-                    <label for="cvv">CVV:</label>
-                    <input type="text" id="cvv" name="cvv" required>
-                </div>         
+                </div>
+            </div>
+            <div class="credit-card-inputs">
+                <label for="cardholder_name">Cardholder name:</label>
+                <input type="text" id="cardholder_name" name="cardholder_name" required>
+                <br>
+                <label for="card_number">Card number:</label>
+                <input type="text" id="card_number" name="card_number" required>
+                <br>
+                <label for="expiry_date">Expiry date:</label>
+                <input type="text" id="expiry_date" name="expiry_date" required>
+                <br>
+                <label for="cvv">CVV:</label>
+                <input type="text" id="cvv" name="cvv" required>
             </div>
             <input type="submit" class="submit-button" value="Submit">
         </form>
