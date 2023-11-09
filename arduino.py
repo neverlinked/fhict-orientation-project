@@ -65,6 +65,8 @@ def setup():
     board.displayOn()
     load_orders()
 
+import time
+
 def loop():
     global order_status_updated
     time.sleep(1)
@@ -107,7 +109,7 @@ def loop():
         Timer -= 1
 
         # Check if Timer is greater than 0, and change the order status to "In Preparation"
-        if Timer > 0:
+        if Timer > 0 :
             update_status_on_kitchen_server('in_preparation')
 
         time.sleep(1)
@@ -123,7 +125,7 @@ def loop():
     # Timer has reached 0, update the order status to "Done"
     if Timer == 0:
         update_status_on_kitchen_server('done')
-
+    
 
 if __name__ == '__main__':
     setup()
