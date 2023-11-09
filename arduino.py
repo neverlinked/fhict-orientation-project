@@ -14,8 +14,8 @@ trigger = 0
 add_time = 0
 orderIndex = 0
 # Define the URL for your kitchen server
-kitchen_server_url = 'http://10.0.0.191:5003/update_status'
-orders_endpoint = 'http://10.0.0.191:5003/get_orders'  # URL to fetch orders
+kitchen_server_url = 'http://145.93.148.56:5003/update_status'
+orders_endpoint = 'http://145.93.148.56:5003/get_orders'  # URL to fetch orders
 
 
 def load_orders():
@@ -66,7 +66,6 @@ def setup():
     load_orders()
 
 def loop():
-    
     global order_status_updated
     time.sleep(1)
     board.displayShow('0')
@@ -106,11 +105,11 @@ def loop():
         seconds = Timer % 60
         display_time = '{:02d}.{:02d}'.format(minutes, seconds)
         Timer -= 1
-        
+
         # Check if Timer is greater than 0, and change the order status to "In Preparation"
-        if Timer > 0 :
+        if Timer > 0:
             update_status_on_kitchen_server('in_preparation')
-            
+
         time.sleep(1)
         board.displayShow(display_time)
 
@@ -120,10 +119,11 @@ def loop():
     board.digital_write(BUZZER, 1)
     time.sleep(5)
     board.digital_write(BUZZER, 0)
-    
+
+    # Timer has reached 0, update the order status to "Done"
     if Timer == 0:
         update_status_on_kitchen_server('done')
-    
+
 
 if __name__ == '__main__':
     setup()
